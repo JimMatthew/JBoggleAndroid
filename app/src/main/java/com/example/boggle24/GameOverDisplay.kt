@@ -102,7 +102,7 @@ fun statCard(highscore: Int, longestWord: String, gamesPlayed: Int) {
         Text(
             text = "Highest Score: $highscore \n" +
                     "Longest Word: $longestWord\n" +
-                    "Games Play: $gamesPlayed",
+                    "Games Played: $gamesPlayed",
             modifier = Modifier
                 .padding(16.dp),
             textAlign = TextAlign.Center,

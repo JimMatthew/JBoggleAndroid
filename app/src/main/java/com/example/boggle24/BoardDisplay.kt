@@ -32,12 +32,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import bogglegame.BoggleBoard
 
 @Composable
 fun BoardDisplay(
     pressed: List<Int>,
     board: Array<String?>,
-    pressLetter: (Int) -> Unit
+    pressLetter: (Int, Enum: BoggleBoard.InputType) -> Unit
 ) {
     var touchPoint by remember { mutableStateOf(Offset.Zero) }
     var xoff by remember { mutableDoubleStateOf(0.0) }
@@ -74,7 +75,7 @@ fun BoardDisplay(
                                         onPress = {
                                             try {
                                                 touchPoint = it
-                                                pressLetter(index)
+                                                pressLetter(index, BoggleBoard.InputType.TAP)
                                             } finally {
                                             }
                                         },
@@ -102,13 +103,13 @@ fun BoardDisplay(
                                                 if (xoff.toInt() != x && yoff.toInt() != y) {
                                                     endDragIndex =
                                                         xoff.toInt() + (yoff.toInt() * 4)
-                                                    pressLetter(endDragIndex)
+                                                    pressLetter(endDragIndex, BoggleBoard.InputType.DRAG)
                                                 } else if (xoff.toInt() != x) {
                                                     endDragIndex = xoff.toInt() + y * 4
-                                                    pressLetter(endDragIndex)
+                                                    pressLetter(endDragIndex, BoggleBoard.InputType.DRAG)
                                                 } else if (yoff.toInt() != y) {
                                                     endDragIndex = (yoff.toInt() * 4) + x
-                                                    pressLetter(endDragIndex)
+                                                    pressLetter(endDragIndex, BoggleBoard.InputType.DRAG)
                                                 }
                                             }
                                         },

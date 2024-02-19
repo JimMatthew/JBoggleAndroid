@@ -46,7 +46,7 @@ class MainActivity : ComponentActivity() {
 
         super.onCreate(savedInstanceState)
         val board = BoggleBoard(this)
-        this.timeleft.value = board.time.toString()
+        //this.timeleft.value = board.time.toString()
         setContent {
             Boggle24Theme {
                 Surface(
@@ -54,7 +54,15 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     Column {
-                        stateManager(boardMaker = board, timeleft.value)
+
+                        Launcher(
+                            startGame = {
+                                stateManager(boardMaker = board, timeleft.value)
+                        },
+                            startSettings = { /*TODO*/ }) {
+
+                        }
+                        //stateManager(boardMaker = board, timeleft.value)
                     }
                 }
             }
@@ -102,14 +110,13 @@ class MainActivity : ComponentActivity() {
 
 
         if (!gameover.value) {
-            BoardDisplay(board = board, pressed = pressed, pressLetter = {
-                boardMaker.letterPress(it)
+            BoardDisplay(board = board, pressed = pressed) {index, type ->
+                boardMaker.letterPress(index, type)
                 update()
-            })
+            }
             Controls(
                 numWords = numWords,
                 score = score,
-                totalGames = totalGames,
                 wordsOnBoard = wordsOnBoard,
                 status = status,
                 isHS = isHighScore,
@@ -137,6 +144,13 @@ class MainActivity : ComponentActivity() {
                 foundWords = wordsFound,
                 wordsOnBoard = wordsOnBoard
             )
+        }
+        Button(
+            modifier = Modifier.padding(5.dp),
+            onClick = {
+
+            }) {
+            Text("Settings")
         }
     }
 

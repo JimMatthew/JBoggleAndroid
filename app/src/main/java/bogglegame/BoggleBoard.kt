@@ -1,6 +1,8 @@
 package bogglegame
 
+import androidx.compose.ui.text.toUpperCase
 import com.example.boggle24.MainActivity
+import java.util.Locale
 import java.util.Random
 import java.util.Timer
 import java.util.TimerTask
@@ -13,7 +15,6 @@ class BoggleBoard {
         "himnqu", "eeinsu", "eeghnnw", "affkps", "hlnnrz", "deilrx", "delrvy"
     )
     lateinit var board: Array<String?>
-    //var pressed: MutableList<Int>
     private var wordHandler: BoggleWordHandler
     private var highScoreHandler: BoggleWordHandler
     var status = ""
@@ -24,7 +25,7 @@ class BoggleBoard {
     var timer: Timer? = null
     var activity: MainActivity? = null
     var stats: BoggleStats?
-    private var isGameOver = false
+    private var isGameOver = true
     private var isRandom = true
     private val genScore = 200
     private var isRunning = false
@@ -33,6 +34,11 @@ class BoggleBoard {
     private val gameBoardWordList: MutableList<List<String>> = ArrayList()
     private var fileHelper: FileHelper? = null
     var pressed = ArrayList<Int>()
+
+    enum class InputType {
+        TAP,
+        DRAG
+    }
     constructor() {
         wordHandler = BoggleWordHandler()
         highScoreHandler = BoggleWordHandler()
@@ -52,6 +58,8 @@ class BoggleBoard {
         if (stats == null) stats = BoggleStats()
         startNewGame()
         makeHighScoreBoards2()
+        score = 0
+        status = ""
     }
 
     fun startNewGame() {
@@ -77,6 +85,7 @@ class BoggleBoard {
         fileHelper!!.writeStatToFile(stats!!, "bog.dat")
         startTimer()
     }
+
 
     private fun startTimer() {
         time = playTime
@@ -128,7 +137,20 @@ class BoggleBoard {
         if (button < 0 || button >= SIZE * SIZE) return
         if (isGameOver) return
         if (pressed.contains(button)) {
-            setNewPosition(pressed.indexOf(button))
+            //setNewPosition(pressed.indexOf(button))
+            currentWord = currentWord.substring(0, pressed.size)
+        } else if (isNextTo(button)) {
+            currentWord += board[button]
+            pressed.add(button)
+        }
+        status = ""
+    }
+
+    fun letterPress(button: Int, type: InputType) {
+        if (button < 0 || button >= SIZE * SIZE) return
+        if (isGameOver) return
+        if (pressed.contains(button)) {
+            setNewPosition(pressed.indexOf(button), type)
             currentWord = currentWord.substring(0, pressed.size)
         } else if (isNextTo(button)) {
             currentWord += board[button]
@@ -143,13 +165,13 @@ class BoggleBoard {
 
     fun submitWordPressed() {
         if (wordHandler.testIfWordAlreadyFound(currentWord)) {
-            status = "$currentWord Was Already Found!"
+            status = "${currentWord.uppercase(Locale.ROOT)}  Was Already Found!"
         } else if (wordHandler.submitWord(currentWord)) {
             score += computeScore(currentWord)
-            status = "$currentWord Was Found!"
+            status = "${currentWord.uppercase(Locale.ROOT)} Was Found!"
             stats!!.isWordLongestFour(currentWord)
         } else {
-            status = "$currentWord Is Not a Word!"
+            status = "${currentWord.uppercase(Locale.ROOT)}  Is Not a Word!"
         }
         clearCurrentWord()
     }
@@ -172,20 +194,14 @@ class BoggleBoard {
         }
     }
 
-    private fun setNewPosition(position: Int) {
-        var position = position
-        if (position != 0) position++ //if root position we want to clear
-        for (j in pressed.size - 1 downTo position) {
-            pressed.remove(pressed[j])
-        }
+    private fun setNewPosition(position: Int, type: InputType) {
+        val newPosition = if (type == InputType.DRAG) position + 1 else position
+        pressed = pressed.take(newPosition).toMutableList() as ArrayList<Int>
     }
 
     val wordsOnBoard: List<String>
-        get() {
-            if (isRandom) {
-            }
-            return wordHandler.wordsOnBoard
-        }
+        get()= wordHandler.wordsOnBoard
+
     val foundWords: String
         get() = wordHandler.foundwords
     val numWordsOnBoard: Int
@@ -193,17 +209,21 @@ class BoggleBoard {
     val numWordsFound: Int
         get() = wordHandler.numFoundWords
 
-    private fun shuffleArr(ar: Array<String>): Array<String> {
+    private fun shuffleArr(array: Array<String>): Array<String> {
         val rnd = Random()
-        for (i in ar.size - 1 downTo 1) {
+        val shuffledArray = array.copyOf()
+        for (i in shuffledArray.size - 1 downTo 1) {
             val index = rnd.nextInt(i + 1)
-            val a = ar[i]
-            ar[i] = ar[index]
-            ar[index] = a
+            val temp = shuffledArray[i]
+            shuffledArray[i] = shuffledArray[index]
+            shuffledArray[index] = temp
         }
-        return ar
+        return shuffledArray
     }
 
+    /*
+        Check if a button is next to the last pressed button
+     */
     private fun isNextTo(button: Int): Boolean {
         if (pressed.size == 0) return true
         val last = pressed[pressed.size - 1]
@@ -211,18 +231,26 @@ class BoggleBoard {
         val Ybtt = button % SIZE
         val Xblp = last / SIZE
         val Yblp = last % SIZE
-        return if (Xblp == -1) true else Xbtt == Xblp && abs(Ybtt - Yblp) == 1 || Ybtt == Yblp && abs(
-            Xbtt - Xblp
-        ) == 1 || abs(Xbtt - Xblp) == 1 && abs(Ybtt - Yblp) == 1
+        return abs(Xbtt - Xblp) <= 1 && abs(Ybtt - Yblp) <= 1
     }
 
-    private fun computeScore(word: String): Int {
+    private fun computeScore2(word: String): Int {
         val len = word.length
         if (len == 3 || len == 4) return 1
         if (len == 5) return 2
         if (len == 6) return 3
         if (len == 7) return 5
         return if (len > 7) 11 else 0
+    }
+
+    private fun computeScore(word: String): Int {
+        return when (val len = word.length) {
+            3, 4 -> 1
+            5 -> 2
+            6 -> 3
+            7 -> 5
+            else -> if (len > 7) 11 else 0
+        }
     }
 
     fun randomizeBoardToArray(): Array<String?> {
