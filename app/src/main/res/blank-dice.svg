@@ -1,0 +1,37 @@
+<?xml version="1.0"?><svg width="640" height="480" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <filter color-interpolation-filters="sRGB" id="filter10343">
+   <feGaussianBlur stdDeviation="0.742857" id="feGaussianBlur10345"/>
+  </filter>
+  <filter color-interpolation-filters="sRGB" id="filter9518">
+   <feGaussianBlur stdDeviation="0.713761" id="feGaussianBlur9520"/>
+  </filter>
+  <linearGradient xlink:href="#linearGradient9356" id="linearGradient6387" x1="0.500011" y1="-0.011912" x2="0.500011" y2="1.011945"/>
+  <linearGradient id="linearGradient9356">
+   <stop offset="0" id="stop9358" stop-color="#f9f8f8"/>
+   <stop id="stop9364" offset="0.070067" stop-color="#ececec"/>
+   <stop offset="0.933283" id="stop9366" stop-color="#e8e7e7"/>
+   <stop offset="1" id="stop9360" stop-color="#b4b3b4"/>
+  </linearGradient>
+  <linearGradient xlink:href="#linearGradient9376" id="linearGradient6389" x1="0.290969" y1="0.815018" x2="0.305204" y2="1.216368"/>
+  <linearGradient id="linearGradient9376">
+   <stop offset="0" id="stop9378" stop-color="#dad9d9"/>
+   <stop id="stop9384" offset="0.27966" stop-color="#dad9d9"/>
+   <stop offset="1" id="stop9380" stop-color="#000000"/>
+  </linearGradient>
+  <radialGradient xlink:href="#linearGradient9498" id="radialGradient6391" gradientUnits="userSpaceOnUse" gradientTransform="matrix(2.939307451248169,0,0,1.021848440170288,-139.29891967773438,1867.44091796875)" cx="103.59114" cy="94.287537" fx="103.59114" fy="94.287537" r="25.809397"/>
+  <linearGradient id="linearGradient9498">
+   <stop offset="0" id="stop9500" stop-color="#ffffff"/>
+   <stop offset="1" id="stop9502" stop-opacity="0" stop-color="#ffffff"/>
+  </linearGradient>
+  <radialGradient xlink:href="#linearGradient9498" id="radialGradient6393" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0.5075876712799072,0,0,0.6563256978988647,725.0993041992188,1850.8701171875)" cx="103.59114" cy="94.287537" fx="103.59114" fy="94.287537" r="25.809397"/>
+ </defs>
+ <metadata id="metadata6455">image/svg+xml</metadata>
+ <g>
+  <title>Layer 1</title>
+  <rect id="rect10391" width="74.285713" height="74.285713" x="-111.821594" y="879.168634" ry="9.285714" filter="url(#filter10343)" stroke-miterlimit="4" stroke-width="0.442913" stroke="#888a85" fill="#888a85" opacity="0.722449" transform="matrix(4,0,0,4,462.299,-3508.66) "/>
+  <rect ry="9.285714" y="877.668634" x="-114.571594" height="74.285713" width="74.285713" id="rect10393" stroke-miterlimit="4" stroke-width="0.442913" stroke="url(#linearGradient6389)" fill="url(#linearGradient6387)" transform="matrix(4,0,0,4,462.299,-3508.66) "/>
+  <path id="path10395" d="m183.86853,52.957031c0,26.55835 -39.621613,48.087891 -88.497414,48.087891c-48.875698,0 -88.497307,-21.529541 -88.497307,-48.087891c0,-26.558102 39.621609,-48.087891 88.497307,-48.087891c48.875801,0 88.497414,21.529789 88.497414,48.087891z" filter="url(#filter9518)" fill="url(#radialGradient6391)" opacity="0.763265"/>
+  <path d="m294.781677,258.413574c0,21.284424 -16.465149,38.539063 -36.77594,38.539063c-20.310745,0 -36.775879,-17.254639 -36.775879,-38.539063c0,-21.284668 16.465134,-38.539307 36.775879,-38.539307c20.310791,0 36.77594,17.254639 36.77594,38.539307z" id="path10397" filter="url(#filter9518)" fill="url(#radialGradient6393)" opacity="0.763265"/>
+ </g>
+</svg>
