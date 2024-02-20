@@ -125,14 +125,12 @@ fun BoardDisplay(
                                 contentDescription = null
                             )
 
-                            board[index]?.let {
-                                Text(
-                                    text = it.uppercase(),
-                                    color = if (pressed.contains(index)) Color.Red else Color.Black,
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 36.sp
-                                )
-                            }
+                            Text(
+                                text = board[index].uppercase(),
+                                color = if (pressed.contains(index)) Color.Red else Color.Black,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 36.sp
+                            )
                         }
                     }
                 }

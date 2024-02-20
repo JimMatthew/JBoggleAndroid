@@ -24,7 +24,7 @@ class BoggleBoard
     var status = ""
     private var SIZE = 4
     var time = 0
-    private var playTime = 20
+    private var playTime = 100
     var score = 0
     var timer: Timer? = null
     var stats: BoggleStats? = stats
