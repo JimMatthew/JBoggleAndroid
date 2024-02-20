@@ -6,6 +6,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
+import java.lang.NullPointerException
 
 class FileHelper(private val context: Context) {
 
@@ -17,6 +18,8 @@ class FileHelper(private val context: Context) {
             oos.close()
         } catch (e: IOException) {
             e.printStackTrace()
+        }catch (e: NullPointerException) {
+
         }
     }
 

@@ -25,84 +25,74 @@ import bogglegame.BoggleStats
 
 @Composable
 fun Launcher(
-    startGame: @Composable () -> Unit,
+    startGame: () -> Unit,
     stats: BoggleStats
 ) {
-    var dostart by remember { mutableStateOf(false) }
-    var hide by remember { mutableStateOf(false) }
     val showSettings by remember { mutableStateOf(false) }
     var showStats by remember { mutableStateOf(false) }
     var ptime by remember { mutableStateOf("") }
     fun setTime(time: String) {
         ptime = time
     }
-    if (dostart) {
-        startGame()
-        hide = true
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Text(
+            fontFamily = FontFamily.Monospace,
+            text = "JBoggle",
+            fontWeight = FontWeight.Bold,
+            fontSize = 35.sp,
+            modifier = Modifier.padding(20.dp, 150.dp)
+        )
     }
 
-    if (!hide) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center
+    ) {
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Button(
+                modifier = Modifier.padding(10.dp),
+                onClick = startGame
+            ) {
+                Text("Start Game")
+            }
+            Button(
+                modifier = Modifier.padding(10.dp),
+                onClick = { showStats = !showStats }
+            ) {
+                Text("Statistics")
+            }
+        }
+        Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
+            if (showSettings) {
+                SettingsDisplay(::setTime)
+            }
+        }
+        Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
+            if (showStats) {
+                StatCard(
+                    highscore = stats.highScore,
+                    longestWord = stats.longestWord,
+                    gamesPlayed = stats.totalGamesPlayed
+                )
+            }
+        }
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
         ) {
             Text(
-                fontFamily = FontFamily.Monospace,
-                text = "JBoggle",
+                text = "2024 James Lindstrom",
                 fontWeight = FontWeight.Bold,
-                fontSize = 35.sp,
-                modifier = Modifier.padding(20.dp, 150.dp)
+                modifier = Modifier.padding(20.dp, 50.dp)
             )
-        }
-        Row {
-
-        }
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center
-        ) {
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Button(
-                    modifier = Modifier.padding(10.dp),
-                    onClick = { dostart = true }
-                ) {
-                    Text("Start Game")
-                }
-                Button(
-                    modifier = Modifier.padding(10.dp),
-                    onClick = { showStats = !showStats }
-                ) {
-                    Text("Statistics")
-                }
-            }
-            Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
-                if (showSettings) {
-                    SettingsDisplay(::setTime)
-                }
-            }
-            Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
-                if (showStats) {
-                    StatCard(
-                        highscore = stats.highScore,
-                        longestWord = stats.longestWord,
-                        gamesPlayed = stats.totalGamesPlayed
-                    )
-                }
-            }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = "2024 James Lindstrom",
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(20.dp, 50.dp)
-                )
-            }
         }
     }
 }

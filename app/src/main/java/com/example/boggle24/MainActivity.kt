@@ -1,5 +1,6 @@
 package com.example.boggle24
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -17,22 +18,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import bogglegame.BoggleBoard
+import bogglegame.BoggleStats
 import bogglegame.FileHelper
 import com.example.boggle24.ui.theme.Boggle24Theme
 import com.example.boggle24.ui.theme.Header
+import kotlinx.coroutines.MainScope
 
 class MainActivity : ComponentActivity() {
 
-    private var timeleft = mutableStateOf("")
+    private var timeleft = mutableStateOf("0")
     private var gameover = mutableStateOf(false)
+    private var islaunched = mutableStateOf(false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val fileHelper = FileHelper(this)
         val boggleStats = fileHelper.readStatFromFile("bog.dat")
         super.onCreate(savedInstanceState)
-        val board = BoggleBoard(this, boggleStats)
 
-
+        val board = BoggleBoard(boggleStats, updateStats = {
+            fileHelper.writeStatToFile(it, "bog.dat")
+        }, gameOver = { gameOver(it) },
+            updateTime = { timeleft.value = it })
         setContent {
             Boggle24Theme {
                 Surface(
@@ -40,16 +46,23 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     Column {
-                        Launcher(
-                            stats = boggleStats,
-                            startGame = { stateManager(boardMaker = board, timeleft.value) }
-                        )
+
+                        if (!islaunched.value) {
+                            Launcher(
+                                stats = boggleStats,
+                                startGame = { islaunched.value = true }
+                            )
+                        } else {
+                            stateManager(boardMaker = board, timeleft.value)
+                        }
+
                     }
                 }
             }
         }
     }
 
+    @SuppressLint("MutableCollectionMutableState")//pressed is always being replaced
     @Composable
     fun stateManager(boardMaker: BoggleBoard, timeLeft: String) {
         var input by remember { mutableStateOf(boardMaker.currentWord) }
@@ -133,7 +146,7 @@ class MainActivity : ComponentActivity() {
         timeleft.value = time.toString()
     }
 
-    fun gameOver(over: Boolean) {
+    private fun gameOver(over: Boolean) {
         gameover.value = over
     }
 }
@@ -141,9 +154,9 @@ class MainActivity : ComponentActivity() {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    val board = BoggleBoard()
+    //val board = BoggleBoard(MainActivity(),null, null)
     Boggle24Theme {
-        Greeting(board, "Android")
+        //Greeting(board, "Android")
     }
 }
 

@@ -8,31 +8,33 @@ import java.util.TimerTask
 import kotlin.math.abs
 
 
-class BoggleBoard {
+class BoggleBoard
+    (stats: BoggleStats,
+     private val updateStats: (BoggleStats) -> Unit,
+     private val gameOver: (Boolean) -> Unit,
+     private val updateTime: (String) -> Unit) {
     var currentWord = ""
     val die = arrayOf(
         "aaeegn", "elrtty", "abbjoo", "abbkoo", "ehrtvw", "cimotu", "distty", "eiosst", "achops",
         "himnqu", "eeinsu", "eeghnnw", "affkps", "hlnnrz", "deilrx", "delrvy"
     )
-    lateinit var board: Array<String?>
-    private var wordHandler: BoggleWordHandler
-    private var highScoreHandler: BoggleWordHandler
+    var board = Array(16) { "" }
+    private var wordHandler: BoggleWordHandler = BoggleWordHandler()
+    private var highScoreHandler: BoggleWordHandler = BoggleWordHandler()
     var status = ""
     private var SIZE = 4
     var time = 0
-    private var playTime = 120
+    private var playTime = 20
     var score = 0
     var timer: Timer? = null
-    var activity: MainActivity? = null
-    var stats: BoggleStats?
+    var stats: BoggleStats? = stats
     private var isGameOver = true
     private var isRandom = true
     private val genScore = 200
     private var isRunning = false
     private var HSIndex = 0
-    private val gameBoardList: MutableList<Array<String?>> = ArrayList()
+    private val gameBoardList: MutableList<Array<String>> = ArrayList()
     private val gameBoardWordList: MutableList<List<String>> = ArrayList()
-    private var fileHelper: FileHelper? = null
     var pressed = ArrayList<Int>()
 
     enum class InputType {
@@ -40,51 +42,16 @@ class BoggleBoard {
         DRAG
     }
 
-    constructor() {
-        wordHandler = BoggleWordHandler()
-        highScoreHandler = BoggleWordHandler()
-        pressed = ArrayList()
-        stats = BoggleStats()
-        startNewGame()
-        makeHighScoreBoards2()
-    }
-
-    constructor(activity: MainActivity?) {
-        wordHandler = BoggleWordHandler()
-        highScoreHandler = BoggleWordHandler()
-        pressed = ArrayList()
-        this.activity = activity
-        fileHelper = FileHelper(activity!!)
-        stats = fileHelper!!.readStatFromFile("bog.dat")
-        if (stats == null) stats = BoggleStats()
-        startNewGame()
-        makeHighScoreBoards2()
-        score = 0
-        status = ""
-    }
-
-    constructor(activity: MainActivity?, stats: BoggleStats) {
-        wordHandler = BoggleWordHandler()
-        highScoreHandler = BoggleWordHandler()
-        pressed = ArrayList()
-        this.activity = activity
-        fileHelper = FileHelper(activity!!)
-        this.stats = stats
-        startNewGame()
-        makeHighScoreBoards2()
-        score = 0
-        status = ""
-    }
 
     fun startNewGame() {
         if (timer != null) timer!!.cancel()
         isGameOver = false
-        activity!!.gameOver(false)
+        gameOver(false)
         board = if (isRandom) {
             rollDice(die)
         } else {
             if (HSIndex + 5 >= gameBoardList.size) {
-                makeHighScoreBoards2()
+                makeHighScoreBoards()
             }
             gameBoardList[HSIndex++]
         }
@@ -96,12 +63,13 @@ class BoggleBoard {
         score = 0
         status = ""
         stats!!.add4GamePlayed()
-        fileHelper!!.writeStatToFile(stats!!, "bog.dat")
+        updateStats(stats!!)
         startTimer()
     }
 
     private fun startTimer() {
         time = playTime
+        updateTime(time.toString())
         val task: TimerTask = object : TimerTask() {
             override fun run() {
                 incrementTime()
@@ -117,10 +85,10 @@ class BoggleBoard {
 
     fun incrementTime() {
         if (time-- > 0) {
-            activity!!.setTimeLeft(time)
+            updateTime(time.toString())
         } else {
             isGameOver = true
-            activity!!.gameOver(true)
+            gameOver(true)
             status = ""
             timerStop()
         }
@@ -176,7 +144,7 @@ class BoggleBoard {
         clearCurrentWord()
     }
 
-    private fun makeHighScoreBoards2() {
+    private fun makeHighScoreBoards() {
         if (!isRunning) {
             isRunning = true
             Thread {
@@ -214,6 +182,13 @@ class BoggleBoard {
         Check if a button is next to the last pressed button
         If there are no pressed buttons, return true
      */
+    private fun isNextTo2(button: Int): Boolean {
+        if (pressed.size == 0) return true
+        val last = pressed[pressed.size - 1]
+        return abs((button/SIZE)-(last/SIZE)) <=1 && abs((button%SIZE)-(last%SIZE)) <=1
+
+    }
+
     private fun isNextTo(button: Int): Boolean {
         if (pressed.size == 0) return true
         val last = pressed[pressed.size - 1]
@@ -238,10 +213,14 @@ class BoggleBoard {
         We need to select a Random letter from each die, then shuffle the order
         of those randomly selected letters
      */
-    private fun rollDice(die: Array<String>): Array<String?> {
+    private fun rollDice(die: Array<String>): Array<String> {
         val random = Random()
         return die.map { it[random.nextInt(it.length)].toString() }.shuffled().toTypedArray()
     }
 
-    
+    init {
+        pressed = ArrayList()
+        score = 0
+        status = ""
+    }
 }

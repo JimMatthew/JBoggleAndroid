@@ -37,7 +37,7 @@ import bogglegame.BoggleBoard
 @Composable
 fun BoardDisplay(
     pressed: List<Int>,
-    board: Array<String?>,
+    board: Array<String>,
     pressLetter: (Int, Enum: BoggleBoard.InputType) -> Unit
 ) {
     var touchPoint by remember { mutableStateOf(Offset.Zero) }
