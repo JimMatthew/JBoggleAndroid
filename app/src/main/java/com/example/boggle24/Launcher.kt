@@ -30,7 +30,7 @@ fun Launcher(
 ) {
     var dostart by remember { mutableStateOf(false) }
     var hide by remember { mutableStateOf(false) }
-    var showSettings by remember { mutableStateOf(false) }
+    val showSettings by remember { mutableStateOf(false) }
     var showStats by remember { mutableStateOf(false) }
     var ptime by remember { mutableStateOf("") }
     fun setTime(time: String) {
@@ -38,7 +38,7 @@ fun Launcher(
     }
     if (dostart) {
         startGame()
-        hide = true;
+        hide = true
     }
 
     if (!hide) {

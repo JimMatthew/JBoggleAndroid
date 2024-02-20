@@ -1,17 +1,12 @@
 package bogglegame;
 
-import static android.content.Context.MODE_PRIVATE;
-
 import android.content.Context;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /*
@@ -19,13 +14,14 @@ import java.io.Serializable;
  */
 public class BoggleStats implements Serializable {
 
+	@Serial
 	private static final long serialVersionUID = 1L;
 	private int totalGamesPlayed;
 	private int totalWordsFound;
 	private String longestWord;
 	private String longestWordFour;
 	private String longestWordFive;
-	private int highScore = 0;
+	private final int highScore = 0;
 	private int totalScore;
 	private int totalTimePlayed;
 	private int total4GamesPlayed;
@@ -63,9 +59,6 @@ public class BoggleStats implements Serializable {
 		total5Score = 0;
 		high4Score = 0;
 		high5Score = 0;
-	}
-
-	public void save() {
 	}
 
 	public BoggleStats load() {

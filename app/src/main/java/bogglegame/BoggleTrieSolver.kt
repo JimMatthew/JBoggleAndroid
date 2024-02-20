@@ -1,6 +1,5 @@
 package bogglegame
 
-import java.util.Stack
 import java.util.stream.Collectors
 import kotlin.math.sqrt
 
@@ -33,7 +32,7 @@ class BoggleTrieSolver {
         set.forEach(::insert)
     }
 
-    fun loadWordList(list: List<String>) {
+    private fun loadWordList(list: List<String>) {
         list.forEach(::insert)
     }
 

@@ -4,36 +4,18 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import bogglegame.BoggleBoard
 import bogglegame.FileHelper
 import com.example.boggle24.ui.theme.Boggle24Theme
@@ -78,7 +60,7 @@ class MainActivity : ComponentActivity() {
         var wordsOnBoard by remember { mutableStateOf(boardMaker.wordsOnBoard) }
         var status by remember { mutableStateOf(boardMaker.status) }
         var score by remember { mutableIntStateOf(boardMaker.score) }
-        var totalGames by remember { mutableIntStateOf(boardMaker.totalGames) }
+        val totalGames by remember { mutableIntStateOf(boardMaker.totalGames) }
         var isHighScore by remember { mutableStateOf(boardMaker.isHighScore()) }
         val currentLocalConfig = LocalConfiguration.current
         val screenWidth = currentLocalConfig.screenWidthDp
@@ -159,7 +141,7 @@ class MainActivity : ComponentActivity() {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    var board = BoggleBoard()
+    val board = BoggleBoard()
     Boggle24Theme {
         Greeting(board, "Android")
     }
