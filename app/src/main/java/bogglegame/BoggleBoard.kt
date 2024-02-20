@@ -5,8 +5,8 @@ import java.util.Locale
 import java.util.Random
 import java.util.Timer
 import java.util.TimerTask
-import java.util.concurrent.Executors
 import kotlin.math.abs
+
 
 class BoggleBoard {
     var currentWord = ""
@@ -20,7 +20,7 @@ class BoggleBoard {
     var status = ""
     private var SIZE = 4
     var time = 0
-    private var playTime = 80
+    private var playTime = 120
     var score = 0
     var timer: Timer? = null
     var activity: MainActivity? = null
@@ -212,6 +212,7 @@ class BoggleBoard {
 
     /*
         Check if a button is next to the last pressed button
+        If there are no pressed buttons, return true
      */
     private fun isNextTo(button: Int): Boolean {
         if (pressed.size == 0) return true
@@ -241,4 +242,6 @@ class BoggleBoard {
         val random = Random()
         return die.map { it[random.nextInt(it.length)].toString() }.shuffled().toTypedArray()
     }
+
+    
 }
