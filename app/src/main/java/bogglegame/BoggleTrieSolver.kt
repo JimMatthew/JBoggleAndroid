@@ -1,24 +1,9 @@
 package bogglegame
 
+import java.util.Stack
 import java.util.stream.Collectors
 import kotlin.math.sqrt
 
-/*
- * This class uses a Trie to recursively search a boggle board to find all valid words
- * Instantiate with BoggleTrieDfsSolver(). You must provide the dictionary as either HashSet<String> or List<String>
- * A boggle Board is to be represented as a 16 item long String Array, containing 1 letter per String
- * Call the solve method by passing a single board as a String[], or you can pass multiple boards 
- * as a List<String[]>. 
- * For single boards, the solve method will return a List<String>, a list of Strings, one String for each word found
- * For multiple boards, a List<List<String>> is returned, a List<String> for each board solved. 
- * NOTE: If no words are found, an empty List<String> is return
- * 
- * The function will begin recursively searching through all possible combinations of dice. 
- * Since this uses a trie, we can at each step check whether the branch we are on is a prefix to a known word
- * If it is not, than we can stop going any further down that path, as there is no possible word to be found
- * This substantially improves performance over a basic recursive DFS search because it eliminates exploring branches
- * that will never contain a valid word. This allows it to solve thousands of boards per second
- */
 class BoggleTrieSolver {
     private var wordsFound: MutableList<String?> = ArrayList()
     private val board = Array(5) { arrayOfNulls<String>(5) }
@@ -71,34 +56,6 @@ class BoggleTrieSolver {
         return wordsFound
     }
 
-    //This method will accept a list of boards, and return a list of the words found for each board
-    //List<String[]> boards is a List, where each String[] represents a board 
-    //Returns a List, containing a List of Strings of words found for each board
-    //Words in each List are deduplicated and sorted largest first. 
-    fun solveList(boards: List<Array<String>>): List<List<String?>> {
-        val lls: MutableList<List<String?>> = ArrayList()
-        for (sa in boards) {
-            size = sqrt(sa.size.toDouble()).toInt()
-            setBoard(sa)
-            val visited = Array(5) { arrayOfNulls<Boolean>(5) }
-            resetVisited(visited)
-            for (i in 0 until size) {
-                for (j in 0 until size) {
-                    solver(visited, "", i, j)
-                }
-            }
-            wordsFound = wordsFound.stream().distinct().collect(Collectors.toList())
-            //Collections.sort(wordsFound, new StringSort());
-            lls.add(wordsFound)
-        }
-        return lls
-    }
-
-    //Recursive method used to find all words on a boggle board
-    //This will perform a depth first search for all possible strings from starting pos, (row,col)
-    //Since this is using a Trie, we can test our current string 'current' to see if it is a valid prefix
-    //If it is not a valid prefix to any word, meaning there is nothing else on this branch, we can return and quit
-    //searching as there is no valid word to be found from this position
     private fun solver(visited: Array<Array<Boolean?>>, current: String?, row: Int, col: Int) {
         var current = current
         visited[row][col] = true
@@ -149,10 +106,6 @@ class BoggleTrieSolver {
         return row in 0..<size && col >= 0 && col < size
     }
 
-    private fun isValidCell(row: Int, col: Int, s: Int): Boolean {
-        return row in 0..<s && col >= 0 && col < s
-    }
-
     private fun resetVisited(b: Array<Array<Boolean?>>) {
         for (i in 0 until size) {
             for (j in 0 until size) {
@@ -170,8 +123,8 @@ class BoggleTrieSolver {
             }
             // if size the same sort alphabetically
             return if (p0.length == p1.length) {
-                    p0.compareTo(p1)
-                } else -1
+                p0.compareTo(p1)
+            } else -1
         }
     }
 

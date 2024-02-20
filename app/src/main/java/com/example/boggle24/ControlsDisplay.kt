@@ -52,7 +52,6 @@ fun Controls(
     Column {
         Text(text = "Words Found: $numWords",modifier = Modifier.padding(5.dp))
         Text(text = "Score: $score",modifier = Modifier.padding(5.dp))
-        //Text(text = "Total Games Played: $totalGames",modifier = Modifier.padding(5.dp))
         Text(text = "Words on Board: " + wordsOnBoard.size,modifier = Modifier.padding(5.dp))
         Row(modifier = Modifier.padding(5.dp)) { Toggle(text = "HS Board", value = isHS, onValueChanged = { toggleHS() }) }
         Row(horizontalArrangement = Arrangement.Center) {

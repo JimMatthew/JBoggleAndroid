@@ -20,7 +20,7 @@ class FileHelper(private val context: Context) {
         }
     }
 
-    fun readStatFromFile(filename: String): BoggleStats? {
+    fun readStatFromFile(filename: String): BoggleStats {
         try {
             val fis: FileInputStream = context.openFileInput(filename)
             val ois = ObjectInputStream(fis)
@@ -32,7 +32,7 @@ class FileHelper(private val context: Context) {
         } catch (e: ClassNotFoundException) {
             e.printStackTrace()
         }
-        return null
+        return BoggleStats()
     }
 
 

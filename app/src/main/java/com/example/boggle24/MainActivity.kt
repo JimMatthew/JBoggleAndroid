@@ -1,4 +1,5 @@
 package com.example.boggle24
+
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -34,6 +35,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bogglegame.BoggleBoard
+import bogglegame.FileHelper
 import com.example.boggle24.ui.theme.Boggle24Theme
 import com.example.boggle24.ui.theme.Header
 
@@ -43,10 +45,12 @@ class MainActivity : ComponentActivity() {
     private var gameover = mutableStateOf(false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
+        val fileHelper = FileHelper(this)
+        val boggleStats = fileHelper.readStatFromFile("bog.dat")
         super.onCreate(savedInstanceState)
-        val board = BoggleBoard(this)
-        //this.timeleft.value = board.time.toString()
+        val board = BoggleBoard(this, boggleStats)
+
+
         setContent {
             Boggle24Theme {
                 Surface(
@@ -54,15 +58,10 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     Column {
-
                         Launcher(
-                            startGame = {
-                                stateManager(boardMaker = board, timeleft.value)
-                        },
-                            startSettings = { /*TODO*/ }) {
-
-                        }
-                        //stateManager(boardMaker = board, timeleft.value)
+                            stats = boggleStats,
+                            startGame = { stateManager(boardMaker = board, timeleft.value) }
+                        )
                     }
                 }
             }
@@ -102,7 +101,8 @@ class MainActivity : ComponentActivity() {
 
         Header(
             timeleft = timeLeft,
-            currentWord = input) {
+            currentWord = input
+        ) {
             boardMaker.startNewGame()
             update()
             newGame()
@@ -110,7 +110,7 @@ class MainActivity : ComponentActivity() {
 
 
         if (!gameover.value) {
-            BoardDisplay(board = board, pressed = pressed) {index, type ->
+            BoardDisplay(board = board, pressed = pressed) { index, type ->
                 boardMaker.letterPress(index, type)
                 update()
             }
@@ -144,13 +144,6 @@ class MainActivity : ComponentActivity() {
                 foundWords = wordsFound,
                 wordsOnBoard = wordsOnBoard
             )
-        }
-        Button(
-            modifier = Modifier.padding(5.dp),
-            onClick = {
-
-            }) {
-            Text("Settings")
         }
     }
 

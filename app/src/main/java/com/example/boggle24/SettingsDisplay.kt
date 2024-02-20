@@ -23,12 +23,12 @@ import java.util.Locale
 @Composable
 fun SettingsDisplay(
     setPlayTime: (String) -> Unit
-){
+) {
 
     var time by remember { mutableStateOf("120") }
     Column {
         Row {
-            Text(text = "Settings",modifier = Modifier.padding(5.dp),fontSize = 23.sp)
+            Text(text = "Settings", modifier = Modifier.padding(5.dp), fontSize = 23.sp)
         }
         Row {
 
@@ -36,7 +36,8 @@ fun SettingsDisplay(
                 value = time,
                 onValueChange = {
                     time = it
-                    setPlayTime(time)},
+                    setPlayTime(time)
+                },
                 label = { Text("Play Time") }
             )
         }

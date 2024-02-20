@@ -46,7 +46,7 @@ fun GameOverDisplay(
     }
     Row {
         if (showStats) {
-            statCard(highScore, longestWord, totalGames)
+            StatCard(highScore, longestWord, totalGames)
         }
     }
     Row {
@@ -86,26 +86,6 @@ fun GameOverDisplay(
             ),
             modifier = Modifier.padding(20.dp),
             readOnly = true
-        )
-    }
-}
-
-@Composable
-fun statCard(highscore: Int, longestWord: String, gamesPlayed: Int) {
-    Card(
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant,
-        ),
-        modifier = Modifier
-            .size(width = 240.dp, height = 100.dp)
-    ) {
-        Text(
-            text = "Highest Score: $highscore \n" +
-                    "Longest Word: $longestWord\n" +
-                    "Games Played: $gamesPlayed",
-            modifier = Modifier
-                .padding(16.dp),
-            textAlign = TextAlign.Center,
         )
     }
 }

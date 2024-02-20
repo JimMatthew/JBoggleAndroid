@@ -20,24 +20,28 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import bogglegame.BoggleStats
+
 
 @Composable
 fun Launcher(
     startGame: @Composable () -> Unit,
-    startSettings: () -> Unit,
-    startStats: () -> Unit
+    stats: BoggleStats
 ) {
     var dostart by remember { mutableStateOf(false) }
     var hide by remember { mutableStateOf(false) }
     var showSettings by remember { mutableStateOf(false) }
+    var showStats by remember { mutableStateOf(false) }
     var ptime by remember { mutableStateOf("") }
-    fun setTime(time: String) {ptime = time}
-    if (dostart){
+    fun setTime(time: String) {
+        ptime = time
+    }
+    if (dostart) {
         startGame()
         hide = true;
     }
 
-    if(!hide){
+    if (!hide) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
@@ -64,26 +68,29 @@ fun Launcher(
             ) {
                 Button(
                     modifier = Modifier.padding(10.dp),
-                    onClick = {dostart = true}
+                    onClick = { dostart = true }
                 ) {
                     Text("Start Game")
                 }
                 Button(
                     modifier = Modifier.padding(10.dp),
-                    onClick = { showSettings = !showSettings }
+                    onClick = { showStats = !showStats }
                 ) {
-                    Text("Settings")
-                }
-                Button(
-                    modifier = Modifier.padding(10.dp),
-                    onClick = { /* Stats */ }
-                ) {
-                    Text("Stats")
+                    Text("Statistics")
                 }
             }
-            Row {
-                if (showSettings){
+            Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
+                if (showSettings) {
                     SettingsDisplay(::setTime)
+                }
+            }
+            Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
+                if (showStats) {
+                    StatCard(
+                        highscore = stats.highScore,
+                        longestWord = stats.longestWord,
+                        gamesPlayed = stats.totalGamesPlayed
+                    )
                 }
             }
             Row(
