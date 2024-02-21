@@ -39,10 +39,6 @@ public class BoggleStats implements Serializable {
 		clearStats();
 	}
 
-	public BoggleStats(Context context) {
-		this.context = context;
-		clearStats();
-	}
 	public void clearStats() {
 		totalGamesPlayed = 0;
 		totalWordsFound = 0;
@@ -60,22 +56,6 @@ public class BoggleStats implements Serializable {
 		high4Score = 0;
 		high5Score = 0;
 	}
-
-	public BoggleStats load() {
-		BoggleStats boggleStats;
-		File file = new File(context.getFilesDir(), "boggle.dat");
-		try {
-			ObjectInputStream input = new ObjectInputStream(new FileInputStream(file));
-			boggleStats = (BoggleStats) (input.readObject());
-			input.close();
-		} catch (Exception e) {
-			boggleStats = new BoggleStats();
-		}
-		return boggleStats;
-	}
-
-
-
 	public void add4GamePlayed() {
 		total4GamesPlayed++;
 	}

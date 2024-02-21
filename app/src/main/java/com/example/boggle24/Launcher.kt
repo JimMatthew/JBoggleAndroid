@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -14,6 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -21,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bogglegame.BoggleStats
+import com.example.boggle24.ui.theme.coolblue
 
 
 @Composable
@@ -58,12 +62,14 @@ fun Launcher(
             horizontalArrangement = Arrangement.Center
         ) {
             Button(
+                colors = ButtonDefaults.buttonColors(containerColor = coolblue),
                 modifier = Modifier.padding(10.dp),
                 onClick = startGame
             ) {
                 Text("Start Game")
             }
             Button(
+                colors = ButtonDefaults.buttonColors(containerColor = coolblue),
                 modifier = Modifier.padding(10.dp),
                 onClick = { showStats = !showStats }
             ) {

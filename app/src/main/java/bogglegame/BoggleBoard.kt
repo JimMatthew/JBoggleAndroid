@@ -167,7 +167,7 @@ class BoggleBoard
         pressed = pressed.take(newPosition).toMutableList() as ArrayList<Int>
     }
 
-    val wordsOnBoard: List<String>
+    val wordsOnBoard: List<String?>
         get() = wordHandler.wordsOnBoard
 
     val foundWords: String
@@ -186,7 +186,6 @@ class BoggleBoard
         if (pressed.size == 0) return true
         val last = pressed[pressed.size - 1]
         return abs((button/SIZE)-(last/SIZE)) <=1 && abs((button%SIZE)-(last%SIZE)) <=1
-
     }
 
     private fun isNextTo(button: Int): Boolean {

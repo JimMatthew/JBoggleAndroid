@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -36,18 +37,18 @@ fun Header(
             //modifier = Modifier.fillMaxWidth(),
         ) {
             Text(
-                text = "Time : $timeleft",
+                text = "  Time : $timeleft",
                 modifier = Modifier.padding(1.dp).width((size).dp),
                 fontSize = 20.sp
             )
             Button(
+                colors = ButtonDefaults.buttonColors(containerColor = coolblue),
                 modifier = Modifier.padding(1.dp).width(size.dp),
                 onClick = {
                     newGame()
                 }) {
                 Text("New Game")
             }
-
         }
         Row(
             horizontalArrangement = Arrangement.Absolute.Center,
@@ -55,12 +56,11 @@ fun Header(
             modifier = Modifier.fillMaxWidth(),
         ){
             Text(
-
                 text = currentWord.uppercase(),
                 style = TextStyle(
                     color = Color.Black,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 25.sp
+                    fontSize = 29.sp
                 )
             )
         }

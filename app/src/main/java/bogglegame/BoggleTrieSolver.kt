@@ -4,7 +4,7 @@ import java.util.stream.Collectors
 import kotlin.math.sqrt
 
 class BoggleTrieSolver {
-    private var wordsFound: MutableList<String?> = ArrayList()
+    private var wordsFound: MutableList<String> = ArrayList()
     private val board = Array(5) { arrayOfNulls<String>(5) }
     private val MaxWordLength = 16
     private var size = 4
@@ -40,7 +40,7 @@ class BoggleTrieSolver {
         return wordsFound
     }
 
-    fun solve(board: Array<String>): List<String?> {
+    fun solve(board: Array<String>): List<String> {
         size = sqrt(board.size.toDouble()).toInt()
         setBoard(board)
         val visited = Array(5) { arrayOfNulls<Boolean>(5) }

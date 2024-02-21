@@ -33,6 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bogglegame.BoggleBoard
+import com.example.boggle24.ui.theme.pdie
 
 @Composable
 fun BoardDisplay(
@@ -62,7 +63,7 @@ fun BoardDisplay(
                         modifier = Modifier
                             .size(boxsize.dp) // Adjust size as needed
                             .padding(5.dp), // Adjust padding as needed
-                        colors = ButtonDefaults.buttonColors(containerColor = c),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.White),
                         contentPadding = PaddingValues(0.dp),
 
                         ) {
@@ -127,10 +128,11 @@ fun BoardDisplay(
 
                             Text(
                                 text = board[index].uppercase(),
-                                color = if (pressed.contains(index)) Color.Red else Color.Black,
+                                color = if (pressed.contains(index)) pdie else Color.Black,
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 36.sp
                             )
+                            //#Color(0xFF38b01e)
                         }
                     }
                 }

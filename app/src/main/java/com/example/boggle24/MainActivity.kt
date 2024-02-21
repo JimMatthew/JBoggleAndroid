@@ -18,17 +18,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import bogglegame.BoggleBoard
-import bogglegame.BoggleStats
 import bogglegame.FileHelper
 import com.example.boggle24.ui.theme.Boggle24Theme
 import com.example.boggle24.ui.theme.Header
-import kotlinx.coroutines.MainScope
 
 class MainActivity : ComponentActivity() {
 
     private var timeleft = mutableStateOf("0")
     private var gameover = mutableStateOf(false)
     private var islaunched = mutableStateOf(false)
+    private var current = mutableStateOf(" ")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val fileHelper = FileHelper(this)
@@ -104,6 +103,7 @@ class MainActivity : ComponentActivity() {
         }
 
 
+
         if (!gameover.value) {
             BoardDisplay(board = board, pressed = pressed) { index, type ->
                 boardMaker.letterPress(index, type)
@@ -122,12 +122,11 @@ class MainActivity : ComponentActivity() {
                 toggleHS = {
                     boardMaker.useHighScoreBoards()
                     update()
-                },
-                cancel = {
-                    boardMaker.clearCurrentWord()
-                    update()
                 }
-            )
+            ) {
+                boardMaker.clearCurrentWord()
+                update()
+            }
         }
         if (gameover.value) {
             GameOverDisplay(
@@ -148,6 +147,10 @@ class MainActivity : ComponentActivity() {
 
     private fun gameOver(over: Boolean) {
         gameover.value = over
+    }
+
+    fun currentWord(currentWord: String) {
+        current.value = currentWord
     }
 }
 

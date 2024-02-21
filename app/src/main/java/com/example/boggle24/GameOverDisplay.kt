@@ -3,10 +3,10 @@ package com.example.boggle24
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -21,6 +21,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.boggle24.ui.theme.coolblue
 import java.util.Locale
 
 @Composable
@@ -31,14 +32,17 @@ fun GameOverDisplay(
     longestWord: String,
     totalGames: Int,
     foundWords: String,
-    wordsOnBoard: List<String>
+    wordsOnBoard: List<String?>
 ) {
     var showStats by remember { mutableStateOf(false) }
     Column {
-        Row(horizontalArrangement = Arrangement.Absolute.Center,
+        Row(
+            horizontalArrangement = Arrangement.Absolute.Center,
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth(),) {
+            modifier = Modifier.fillMaxWidth(),
+        ) {
             Button(
+                colors = ButtonDefaults.buttonColors(containerColor = coolblue),
                 modifier = Modifier.padding(5.dp),
                 onClick = {
                     showStats = !showStats
@@ -46,14 +50,19 @@ fun GameOverDisplay(
                 Text("Show Stats")
             }
         }
-        Row(horizontalArrangement = Arrangement.Absolute.Center,
+        Row(
+            horizontalArrangement = Arrangement.Absolute.Center,
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth(),) {
+            modifier = Modifier.fillMaxWidth(),
+        ) {
             if (showStats) {
                 StatCard(highScore, longestWord, totalGames)
             }
         }
-        Column(horizontalAlignment = Alignment.CenterHorizontally,modifier = Modifier.fillMaxWidth()) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxWidth()
+        ) {
             Text(
                 text = "Game Over!",
                 color = Color.Black, // Adjust text color as needed
@@ -73,21 +82,21 @@ fun GameOverDisplay(
                 fontSize = 20.sp
             )
         }
-        Row(horizontalArrangement = Arrangement.Absolute.Center,
+        Row(
+            horizontalArrangement = Arrangement.Absolute.Center,
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth(),) {
-
-
+            modifier = Modifier.fillMaxWidth(),
+        ) {
         }
     }
 
-    Row (horizontalArrangement = Arrangement.SpaceEvenly){
+    Row(horizontalArrangement = Arrangement.SpaceEvenly) {
         val size = wordsOnBoard.size
         TextField(
             value = wordsOnBoard.joinToString(separator = "\n").uppercase(Locale.ROOT),
             onValueChange = { },
             label = { Text("$size Words on Board") },
-            maxLines = 40,
+            maxLines = 20,
             textStyle = TextStyle(
                 fontSize = 20.sp,
                 color = Color.Black,
@@ -103,10 +112,10 @@ fun GameOverDisplay(
             value = foundWords.uppercase(Locale.ROOT),
             onValueChange = { },
             label = { Text("Words Found") },
-            maxLines = 12,
+            maxLines = 20,
             textStyle = TextStyle(
                 fontSize = 20.sp,
-                color = Color.Blue,
+                color = coolblue,
                 fontWeight = FontWeight.Bold
             ),
 

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -13,12 +14,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.boggle24.ui.theme.coolblue
 
 @Composable
 fun Controls(
     numWords: Int,
     score: Int,
-    wordsOnBoard: List<String>,
+    wordsOnBoard: List<String?>,
     status: String,
     isHS: Boolean,
     submit: () -> Unit,
@@ -31,6 +33,7 @@ fun Controls(
             .fillMaxWidth()
     ) {
         Button(
+            colors = ButtonDefaults.buttonColors(containerColor = coolblue),
             modifier = Modifier
                 .padding(5.dp)
                 .weight(1f),
@@ -40,6 +43,7 @@ fun Controls(
             Text("Submit")
         }
         Button(
+            colors = ButtonDefaults.buttonColors(containerColor = coolblue),
             modifier = Modifier
                 .padding(5.dp)
                 .weight(1f),
@@ -58,11 +62,15 @@ fun Controls(
                 modifier = Modifier.padding(20.dp)
             )
         }
-        Text(text = "Words Found: $numWords",modifier = Modifier.padding(5.dp))
-        Text(text = "Score: $score",modifier = Modifier.padding(5.dp))
-        Text(text = "Words on Board: " + wordsOnBoard.size,modifier = Modifier.padding(5.dp))
-        Row(modifier = Modifier.padding(5.dp)) { Toggle(text = "HS Board", value = isHS, onValueChanged = { toggleHS() }) }
-
+        Text(text = "Words Found: $numWords", modifier = Modifier.padding(8.dp))
+        Text(text = "Score: $score", modifier = Modifier.padding(8.dp))
+        Text(text = "Words on Board: " + wordsOnBoard.size, modifier = Modifier.padding(8.dp))
+        Row(modifier = Modifier.padding(5.dp)) {
+            Toggle(
+                text = "HS Board",
+                value = isHS,
+                onValueChanged = { toggleHS() })
+        }
     }
 }
 
