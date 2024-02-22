@@ -2,7 +2,11 @@ package com.example.boggle24
 
 import android.annotation.SuppressLint
 import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
+import android.view.WindowInsets
+import android.view.WindowInsetsController
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -29,6 +33,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.ui.graphics.Color
+import androidx.core.view.WindowCompat
 
 class MainActivity : ComponentActivity() {
 
@@ -55,19 +60,16 @@ class MainActivity : ComponentActivity() {
                     color = Color.White
                 ) {
 
-                    Column {
-                        when (configuration.orientation) {
-                            Configuration.ORIENTATION_LANDSCAPE -> {
-                                isRotated.value = true
-                                states.rotate()
-                            }
-
-                            // Other wise
-                            else -> {
-                                isRotated.value = false
-                                states.rotate()
-                            }
+                    when (configuration.orientation) {
+                        Configuration.ORIENTATION_LANDSCAPE -> {
+                            isRotated.value = true
+                            states.rotate()
+                        } else -> {
+                            isRotated.value = false
+                            states.rotate()
                         }
+                    }
+                    Column {
                         if (!islaunched.value) {
                             Launcher(
                                 stats = boggleStats,
@@ -80,12 +82,23 @@ class MainActivity : ComponentActivity() {
 
                     }
                 }
+
             }
+            hideSystemUI()
         }
     }
 
     private fun saveStats(stats: BoggleStats){
         fileHelper.writeStatToFile(stats, "bog.dat")
+    }
+
+    private fun hideSystemUI() {
+        actionBar?.hide()
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        window.insetsController?.apply {
+            hide(WindowInsets.Type.statusBars())
+            systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        }
     }
 
 

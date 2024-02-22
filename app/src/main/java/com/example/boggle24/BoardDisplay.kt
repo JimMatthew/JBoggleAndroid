@@ -53,7 +53,7 @@ fun BoardDisplay(
 
     if (isRotated) boxsize /= 2
     if (isRotated){
-       // swp = with(LocalDensity.current) { currentLocalConfig.screenHeightDp.dp.toPx() }
+        swp /= 2
     }
     Column {
         for (i in 0..3) {

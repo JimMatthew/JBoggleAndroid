@@ -26,9 +26,8 @@ class BoggleBoard
     private var highScoreHandler: BoggleWordHandler = BoggleWordHandler()
     private var SIZE = 4
     var time = 0
-    private var playTime = 20
+    private var playTime = 100
     var timer: Timer? = null
-    //var stats: BoggleStats? = stats
     private var isGameOver = true
     private var isRandom = true
     private val genScore = 200
@@ -58,8 +57,6 @@ class BoggleBoard
         pressed = ArrayList()
         pressedDice(pressed)
         updateStatus("")
-       // stats!!.add4GamePlayed()
-        //updateStats(stats!!)
         boardArray(board)
         startTimer()
     }
@@ -154,12 +151,6 @@ class BoggleBoard
         Check if a button is next to the last pressed button
         If there are no pressed buttons, return true
      */
-    private fun isNextTo2(button: Int): Boolean {
-        if (pressed.size == 0) return true
-        val last = pressed[pressed.size - 1]
-        return abs((button/SIZE)-(last/SIZE)) <=1 && abs((button%SIZE)-(last%SIZE)) <=1
-    }
-
     private fun isNextTo(button: Int): Boolean {
         if (pressed.size == 0) return true
         val last = pressed[pressed.size - 1]

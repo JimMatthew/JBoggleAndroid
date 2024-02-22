@@ -62,8 +62,12 @@ class StateManager(
     fun stateManager() {
 
         if (isRotated) {
-            Row (horizontalArrangement = Arrangement.SpaceEvenly){
-                BoardDisplay(board = board.value, isRotated = isRotated, pressed = pressed.value) { index, type ->
+            Row(horizontalArrangement = Arrangement.SpaceEvenly) {
+                BoardDisplay(
+                    board = board.value,
+                    isRotated = isRotated,
+                    pressed = pressed.value
+                ) { index, type ->
                     boardMaker.letterPress(index, type)
                 }
                 Column {
@@ -72,7 +76,7 @@ class StateManager(
                         currentWord = current.value,
                         newGame = { startNewGame() }
                     )
-                    if (!gameover.value){
+                    if (!gameover.value) {
                         Controls(
                             numWords = numWordsFound.intValue,
                             score = score.intValue,
@@ -97,14 +101,18 @@ class StateManager(
                     }
                 }
             }
-        } else {
+        } else {    //Not Rotated
             Header(
                 timeleft = timeLeft.value,
                 currentWord = current.value,
                 newGame = { startNewGame() }
             )
-            if (!gameover.value){
-                BoardDisplay(board = board.value, isRotated = isRotated, pressed = pressed.value) { index, type ->
+            if (!gameover.value) {
+                BoardDisplay(
+                    board = board.value,
+                    isRotated = isRotated,
+                    pressed = pressed.value
+                ) { index, type ->
                     boardMaker.letterPress(index, type)
                 }
                 Controls(
@@ -189,7 +197,7 @@ class StateManager(
     }
 
     private fun submitWord() {
-        if (boggleWordHandler.submit(current.value)){
+        if (boggleWordHandler.submit(current.value)) {
             stats.value.isWordLongestFour(current.value)
         }
         boardMaker.clearCurrentWord()
