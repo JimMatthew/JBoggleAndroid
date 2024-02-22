@@ -12,6 +12,11 @@ class BoggleBoard
     (stats: BoggleStats,
      private val updateStats: (BoggleStats) -> Unit,
      private val gameOver: (Boolean) -> Unit,
+     private val wordInput: (String) -> Unit,
+     private val pressedDice: (ArrayList<Int>) -> Unit,
+     private val boardArray: (Array<String>) -> Unit,
+     private val updateStatus: (String) -> Unit,
+     private val isHighScoreMode: (Boolean) -> Unit,
      private val updateTime: (String) -> Unit) {
     var currentWord = ""
     val die = arrayOf(
@@ -19,13 +24,10 @@ class BoggleBoard
         "himnqu", "eeinsu", "eeghnnw", "affkps", "hlnnrz", "deilrx", "delrvy"
     )
     var board = Array(16) { "" }
-    private var wordHandler: BoggleWordHandler = BoggleWordHandler()
     private var highScoreHandler: BoggleWordHandler = BoggleWordHandler()
-    var status = ""
     private var SIZE = 4
     var time = 0
-    private var playTime = 100
-    var score = 0
+    private var playTime = 15
     var timer: Timer? = null
     var stats: BoggleStats? = stats
     private var isGameOver = true
@@ -36,12 +38,10 @@ class BoggleBoard
     private val gameBoardList: MutableList<Array<String>> = ArrayList()
     private val gameBoardWordList: MutableList<List<String>> = ArrayList()
     var pressed = ArrayList<Int>()
-
     enum class InputType {
         TAP,
         DRAG
     }
-
 
     fun startNewGame() {
         if (timer != null) timer!!.cancel()
@@ -57,13 +57,11 @@ class BoggleBoard
         }
         clearCurrentWord()
         pressed = ArrayList()
-        wordHandler.clearUserWords()
-        wordHandler.setBoardLayout(board)
-        if (score != 0) stats!!.add4Score(score)
-        score = 0
-        status = ""
+        pressedDice(pressed)
+        updateStatus("")
         stats!!.add4GamePlayed()
         updateStats(stats!!)
+        boardArray(board)
         startTimer()
     }
 
@@ -89,7 +87,7 @@ class BoggleBoard
         } else {
             isGameOver = true
             gameOver(true)
-            status = ""
+            updateStatus("")
             timerStop()
         }
     }
@@ -101,18 +99,14 @@ class BoggleBoard
     fun clearCurrentWord() {
         pressed = ArrayList()
         currentWord = ""
+        pressedDice(pressed)
+        wordInput(currentWord)
     }
 
     fun useHighScoreBoards() {
         isRandom = !isRandom
+        isHighScoreMode(!isRandom)
     }
-
-    val totalGames: Int
-        get() = stats!!.total4Games
-    val highScore: Int
-        get() = stats!!.highScore
-    val longestWord: String
-        get() = stats!!.longestWordFour
 
     fun letterPress(button: Int, type: InputType) {
         if (button < 0 || button >= SIZE * SIZE) return
@@ -124,24 +118,14 @@ class BoggleBoard
             currentWord += board[button]
             pressed.add(button)
         }
-        status = ""
+        wordInput(currentWord)
+        pressedDice(pressed)
+        boardArray(board)
+        updateStatus("")
     }
 
     fun isHighScore(): Boolean {
         return !isRandom
-    }
-
-    fun submitWordPressed() {
-        if (wordHandler.testIfWordAlreadyFound(currentWord)) {
-            status = "${currentWord.uppercase(Locale.ROOT)}  Was Already Found!"
-        } else if (wordHandler.submitWord(currentWord)) {
-            score += computeScore(currentWord)
-            status = "${currentWord.uppercase(Locale.ROOT)} Was Found!"
-            stats!!.isWordLongestFour(currentWord)
-        } else {
-            status = "${currentWord.uppercase(Locale.ROOT)}  Is Not a Word!"
-        }
-        clearCurrentWord()
     }
 
     private fun makeHighScoreBoards() {
@@ -167,17 +151,6 @@ class BoggleBoard
         pressed = pressed.take(newPosition).toMutableList() as ArrayList<Int>
     }
 
-    val wordsOnBoard: List<String?>
-        get() = wordHandler.wordsOnBoard
-
-    val foundWords: String
-        get() = wordHandler.foundwords
-    val numWordsOnBoard: Int
-        get() = wordHandler.numOfWordsOnBoard
-    val numWordsFound: Int
-        get() = wordHandler.numFoundWords
-
-
     /*
         Check if a button is next to the last pressed button
         If there are no pressed buttons, return true
@@ -198,16 +171,6 @@ class BoggleBoard
         return abs(Xbtt - Xblp) <= 1 && abs(Ybtt - Yblp) <= 1
     }
 
-    private fun computeScore(word: String): Int {
-        return when (val len = word.length) {
-            3, 4 -> 1
-            5 -> 2
-            6 -> 3
-            7 -> 5
-            else -> if (len > 7) 11 else 0
-        }
-    }
-
     /*
         We need to select a Random letter from each die, then shuffle the order
         of those randomly selected letters
@@ -219,7 +182,5 @@ class BoggleBoard
 
     init {
         pressed = ArrayList()
-        score = 0
-        status = ""
     }
 }

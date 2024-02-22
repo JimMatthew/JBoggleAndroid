@@ -18,26 +18,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import bogglegame.BoggleBoard
+import bogglegame.BoggleStats
 import bogglegame.FileHelper
 import com.example.boggle24.ui.theme.Boggle24Theme
 import com.example.boggle24.ui.theme.Header
 
 class MainActivity : ComponentActivity() {
 
-    private var timeleft = mutableStateOf("0")
-    private var gameover = mutableStateOf(false)
     private var islaunched = mutableStateOf(false)
-    private var current = mutableStateOf(" ")
-
+    private val fileHelper = FileHelper(this)
     override fun onCreate(savedInstanceState: Bundle?) {
-        val fileHelper = FileHelper(this)
+
         val boggleStats = fileHelper.readStatFromFile("bog.dat")
         super.onCreate(savedInstanceState)
 
-        val board = BoggleBoard(boggleStats, updateStats = {
-            fileHelper.writeStatToFile(it, "bog.dat")
-        }, gameOver = { gameOver(it) },
-            updateTime = { timeleft.value = it })
+        var states = StateManager(boggleStats, saveStats = {saveStats(it)})
         setContent {
             Boggle24Theme {
                 Surface(
@@ -52,7 +47,7 @@ class MainActivity : ComponentActivity() {
                                 startGame = { islaunched.value = true }
                             )
                         } else {
-                            stateManager(boardMaker = board, timeleft.value)
+                            states.stateManager()
                         }
 
                     }
@@ -61,96 +56,8 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    @SuppressLint("MutableCollectionMutableState")//pressed is always being replaced
-    @Composable
-    fun stateManager(boardMaker: BoggleBoard, timeLeft: String) {
-        var input by remember { mutableStateOf(boardMaker.currentWord) }
-        var board by remember { mutableStateOf(boardMaker.board) }
-        var pressed by remember { mutableStateOf(boardMaker.pressed) }
-        var numWords by remember { mutableIntStateOf(boardMaker.numWordsFound) }
-        var wordsFound by remember { mutableStateOf(boardMaker.foundWords) }
-        var wordsOnBoard by remember { mutableStateOf(boardMaker.wordsOnBoard) }
-        var status by remember { mutableStateOf(boardMaker.status) }
-        var score by remember { mutableIntStateOf(boardMaker.score) }
-        val totalGames by remember { mutableIntStateOf(boardMaker.totalGames) }
-        var isHighScore by remember { mutableStateOf(boardMaker.isHighScore()) }
-        val currentLocalConfig = LocalConfiguration.current
-        val screenWidth = currentLocalConfig.screenWidthDp
-
-        fun update() {
-            board = boardMaker.board
-            input = boardMaker.currentWord
-            pressed = boardMaker.pressed
-            status = boardMaker.status
-            score = boardMaker.score
-            isHighScore = boardMaker.isHighScore()
-            numWords = boardMaker.numWordsFound
-            wordsFound = boardMaker.foundWords
-        }
-
-        fun newGame() {
-            board = boardMaker.board
-            wordsOnBoard = boardMaker.wordsOnBoard
-        }
-
-        Header(
-            timeleft = timeLeft,
-            currentWord = input
-        ) {
-            boardMaker.startNewGame()
-            update()
-            newGame()
-        }
-
-
-
-        if (!gameover.value) {
-            BoardDisplay(board = board, pressed = pressed) { index, type ->
-                boardMaker.letterPress(index, type)
-                update()
-            }
-            Controls(
-                numWords = numWords,
-                score = score,
-                wordsOnBoard = wordsOnBoard,
-                status = status,
-                isHS = isHighScore,
-                submit = {
-                    boardMaker.submitWordPressed()
-                    update()
-                },
-                toggleHS = {
-                    boardMaker.useHighScoreBoards()
-                    update()
-                }
-            ) {
-                boardMaker.clearCurrentWord()
-                update()
-            }
-        }
-        if (gameover.value) {
-            GameOverDisplay(
-                numWords = numWords.toString(),
-                score = score,
-                highScore = boardMaker.highScore,
-                longestWord = boardMaker.longestWord,
-                totalGames = totalGames,
-                foundWords = wordsFound,
-                wordsOnBoard = wordsOnBoard
-            )
-        }
-    }
-
-    fun setTimeLeft(time: Int) {
-        timeleft.value = time.toString()
-    }
-
-    private fun gameOver(over: Boolean) {
-        gameover.value = over
-    }
-
-    fun currentWord(currentWord: String) {
-        current.value = currentWord
+    fun saveStats(stats: BoggleStats){
+        fileHelper.writeStatToFile(stats, "bog.dat")
     }
 }
 

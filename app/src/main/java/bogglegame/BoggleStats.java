@@ -69,6 +69,7 @@ public class BoggleStats implements Serializable {
 		if (score > high4Score) {
 			high4Score = score;
 		}
+		total4GamesPlayed++;
 	}
 
 	public void add5Score(int score) {

@@ -10,5 +10,10 @@ val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
-val coolblue = Color(0xFF18678d)
-val pdie = Color(0xFFb04d1e)
+val coolblue3 = Color(0xFF18678d)
+val pdie7 = Color(0xFF20ce1b)
+//val pdie = Color(0xFFe57b1e)
+val pdie = Color(0xFFce6f1b)
+
+val coolbluei =Color(0xFF1E88E5)
+val coolblue =Color(0xFF3287d3)

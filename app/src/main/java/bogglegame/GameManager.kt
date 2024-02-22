@@ -1,0 +1,6 @@
+package bogglegame
+
+class GameManager() {
+
+
+}
