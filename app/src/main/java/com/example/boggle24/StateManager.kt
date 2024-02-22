@@ -1,9 +1,19 @@
 package com.example.boggle24
 
 
+import android.content.res.Configuration
+import android.graphics.drawable.GradientDrawable.Orientation
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalConfiguration
 import bogglegame.BoggleBoard
 import bogglegame.BoggleStats
 import bogglegame.BoggleWordHandler
@@ -13,18 +23,19 @@ import java.util.Locale
 
 class StateManager(
     stats: BoggleStats,
+    var isRotated: Boolean,
     val saveStats: (BoggleStats) -> Unit
 ) {
 
-    val boggleWordHandler = WordScoreHandler(
-        updateStatus = {gameStatus(it)},
-        updateScore = {score(it)},
-        updateNumWordsFound = {NumWordsFound(it)},
-        updateWordsFound = {foundWords(it)}
+    private val boggleWordHandler = WordScoreHandler(
+        updateStatus = { gameStatus(it) },
+        updateScore = { score(it) },
+        updateNumWordsFound = { NumWordsFound(it) },
+        updateWordsFound = { foundWords(it) },
+        allWordsOnBoard = { wordsOnBoard(it) }
     )
-    private val boardMaker = BoggleBoard(stats, updateStats = {
-        saveStats(it)
-    }, gameOver = { gameOver(it) },
+    private val boardMaker = BoggleBoard(
+        gameOver = { gameOver(it) },
         wordInput = { currentWord(it) },
         pressedDice = { PressedDice(it) },
         boardArray = { BoardArray(it) },
@@ -45,44 +56,80 @@ class StateManager(
     var status = mutableStateOf("")
     var score = mutableIntStateOf(0)
     private var isHighScore = mutableStateOf(boardMaker.isHighScore())
-
+    var or = mutableIntStateOf(0)
 
     @Composable
     fun stateManager() {
 
-        Header(
-            timeleft = timeLeft.value,
-            currentWord = current.value,
-            newGame = { startNewGame() }
-        )
-
-        if (!gameover.value) {
-            GameDisplay(
-                board = board.value,
-                pressed = pressed.value,
-                score = score.intValue,
-                status = status.value,
-                isHighScore = isHighScore.value,
-                wordsOnBoard = wordsOnBoard.value,
-                numWordsFound = numWordsFound.intValue,
-                pressLetter = { index, type ->
+        if (isRotated) {
+            Row (horizontalArrangement = Arrangement.SpaceEvenly){
+                BoardDisplay(board = board.value, isRotated = isRotated, pressed = pressed.value) { index, type ->
                     boardMaker.letterPress(index, type)
-                },
-                clearCurrentWord = { boardMaker.clearCurrentWord() },
-                useHighScoreBoards = { boardMaker.useHighScoreBoards() },
-                submitWord =  ::submitWord )
+                }
+                Column {
+                    Header(
+                        timeleft = timeLeft.value,
+                        currentWord = current.value,
+                        newGame = { startNewGame() }
+                    )
+                    if (!gameover.value){
+                        Controls(
+                            numWords = numWordsFound.intValue,
+                            score = score.intValue,
+                            wordsOnBoard = wordsOnBoard.value,
+                            status = status.value,
+                            isHS = isHighScore.value,
+                            submit = { submitWord() },
+                            toggleHS = { isHighScore.value = !isHighScore.value },
+                            cancel = { boardMaker.clearCurrentWord() }
+                        )
+                    } else {
+                        GameOverDisplay(
+                            numWords = numWordsFound.intValue.toString(),
+                            score = score.intValue,
+                            highScore = stats.value.highScore,
+                            longestWord = stats.value.longestWord,
+                            totalGames = stats.value.total4Games,
+                            foundWords = foundWords.value,
+                            isRotated = isRotated,
+                            wordsOnBoard = wordsOnBoard.value
+                        )
+                    }
+                }
+            }
         } else {
-            GameOverDisplay(
-                numWords = numWordsFound.intValue.toString(),
-                score = score.intValue,
-                highScore = stats.value.highScore,
-                longestWord = stats.value.longestWord,
-                totalGames = stats.value.total4Games,
-                foundWords = foundWords.value,
-                wordsOnBoard = wordsOnBoard.value
+            Header(
+                timeleft = timeLeft.value,
+                currentWord = current.value,
+                newGame = { startNewGame() }
             )
+            if (!gameover.value){
+                BoardDisplay(board = board.value, isRotated = isRotated, pressed = pressed.value) { index, type ->
+                    boardMaker.letterPress(index, type)
+                }
+                Controls(
+                    numWords = numWordsFound.intValue,
+                    score = score.intValue,
+                    wordsOnBoard = wordsOnBoard.value,
+                    status = status.value,
+                    isHS = isHighScore.value,
+                    submit = { submitWord() },
+                    toggleHS = { boardMaker.useHighScoreBoards() },
+                    cancel = { boardMaker.clearCurrentWord() }
+                )
+            } else {
+                GameOverDisplay(
+                    numWords = numWordsFound.intValue.toString(),
+                    score = score.intValue,
+                    highScore = stats.value.highScore,
+                    longestWord = stats.value.longestWord,
+                    totalGames = stats.value.total4Games,
+                    foundWords = foundWords.value,
+                    isRotated = isRotated,
+                    wordsOnBoard = wordsOnBoard.value
+                )
+            }
         }
-
     }
 
     private fun setTimeLeft(time: String) {
@@ -93,31 +140,31 @@ class StateManager(
         gameover.value = over
     }
 
-    fun currentWord(currentWord: String) {
+    private fun currentWord(currentWord: String) {
         current.value = currentWord
     }
 
-    fun PressedDice(pressedDice: ArrayList<Int>) {
+    private fun PressedDice(pressedDice: ArrayList<Int>) {
         pressed.value = pressedDice
     }
 
-    fun BoardArray(boardArray: Array<String>) {
+    private fun BoardArray(boardArray: Array<String>) {
         board.value = boardArray
     }
 
-    fun NumWordsFound(numWordsFound: Int) {
+    private fun NumWordsFound(numWordsFound: Int) {
         this.numWordsFound.intValue = numWordsFound
     }
 
-    fun foundWords(foundWords: String) {
+    private fun foundWords(foundWords: String) {
         this.foundWords.value = foundWords
     }
 
-    fun wordsOnBoard(wordsOnBoard: List<String>) {
+    private fun wordsOnBoard(wordsOnBoard: List<String>) {
         this.wordsOnBoard.value = wordsOnBoard as ArrayList<String>
     }
 
-    fun gameStatus(status: String) {
+    private fun gameStatus(status: String) {
         this.status.value = status
     }
 
@@ -125,23 +172,31 @@ class StateManager(
         this.score.intValue = score
     }
 
-    fun isHighScoreMode(mode: Boolean) {
+    private fun isHighScoreMode(mode: Boolean) {
         isHighScore.value = mode
     }
 
-    fun startNewGame() {
+    private fun startNewGame() {
+        stats.value.add4Score(score.intValue)
+        saveStats(stats.value)
         boardMaker.startNewGame()
         boggleWordHandler.clearUserWords()
         boggleWordHandler.setBoardLayout(board.value)
-        wordsOnBoard(boggleWordHandler.wordsOnBoard)
-        stats.value.add4Score(score.intValue)
-        saveStats(stats.value)
     }
 
-    fun submitWord() {
-        boggleWordHandler.submit(current.value)
+    fun rotate() {
+        isRotated = !isRotated
+    }
+
+    private fun submitWord() {
+        if (boggleWordHandler.submit(current.value)){
+            stats.value.isWordLongestFour(current.value)
+        }
         boardMaker.clearCurrentWord()
     }
 
 }
+
+
+
 

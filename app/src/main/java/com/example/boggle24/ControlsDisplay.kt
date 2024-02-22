@@ -59,8 +59,8 @@ fun Controls(
             Text(
                 text = status,
                 fontWeight = FontWeight.Bold,
-                fontSize = 23.sp,
-                modifier = Modifier.padding(20.dp)
+                fontSize = 20.sp,
+                modifier = Modifier.padding(15.dp)
             )
         }
         Text(text = "Words Found: $numWords", modifier = Modifier.padding(8.dp))

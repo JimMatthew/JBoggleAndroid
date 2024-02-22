@@ -9,8 +9,7 @@ import kotlin.math.abs
 
 
 class BoggleBoard
-    (stats: BoggleStats,
-     private val updateStats: (BoggleStats) -> Unit,
+    (
      private val gameOver: (Boolean) -> Unit,
      private val wordInput: (String) -> Unit,
      private val pressedDice: (ArrayList<Int>) -> Unit,
@@ -27,9 +26,9 @@ class BoggleBoard
     private var highScoreHandler: BoggleWordHandler = BoggleWordHandler()
     private var SIZE = 4
     var time = 0
-    private var playTime = 15
+    private var playTime = 20
     var timer: Timer? = null
-    var stats: BoggleStats? = stats
+    //var stats: BoggleStats? = stats
     private var isGameOver = true
     private var isRandom = true
     private val genScore = 200
@@ -59,8 +58,8 @@ class BoggleBoard
         pressed = ArrayList()
         pressedDice(pressed)
         updateStatus("")
-        stats!!.add4GamePlayed()
-        updateStats(stats!!)
+       // stats!!.add4GamePlayed()
+        //updateStats(stats!!)
         boardArray(board)
         startTimer()
     }
@@ -182,5 +181,6 @@ class BoggleBoard
 
     init {
         pressed = ArrayList()
+        makeHighScoreBoards()
     }
 }

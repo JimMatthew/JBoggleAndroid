@@ -39,6 +39,7 @@ import com.example.boggle24.ui.theme.pdie
 fun BoardDisplay(
     pressed: List<Int>,
     board: Array<String>,
+    isRotated: Boolean,
     pressLetter: (Int, Enum: BoggleBoard.InputType) -> Unit
 ) {
     var touchPoint by remember { mutableStateOf(Offset.Zero) }
@@ -47,9 +48,13 @@ fun BoardDisplay(
     var endDragIndex by remember { mutableIntStateOf(-1) }
     val currentLocalConfig = LocalConfiguration.current
     val screenWidth = currentLocalConfig.screenWidthDp
-    val boxsize = (screenWidth) / 4
-    val swp = with(LocalDensity.current) { currentLocalConfig.screenWidthDp.dp.toPx() }
+    var boxsize = (screenWidth) / 4
+    var swp = with(LocalDensity.current) { currentLocalConfig.screenWidthDp.dp.toPx() }
 
+    if (isRotated) boxsize /= 2
+    if (isRotated){
+       // swp = with(LocalDensity.current) { currentLocalConfig.screenHeightDp.dp.toPx() }
+    }
     Column {
         for (i in 0..3) {
             Row {
@@ -70,7 +75,7 @@ fun BoardDisplay(
                         Box(
                             modifier = Modifier
                                 .size(boxsize.dp)
-                                .fillMaxSize()
+                                //.fillMaxSize()
                                 .pointerInput(Unit) {
                                     detectTapGestures(
                                         onPress = {
@@ -126,12 +131,24 @@ fun BoardDisplay(
                                 contentDescription = null
                             )
 
-                            Text(
-                                text = board[index].uppercase(),
-                                color = if (pressed.contains(index)) pdie else Color.Black,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 36.sp
-                            )
+                            if (isRotated){
+                                Text(
+                                    text = board[index].uppercase(),
+                                    color = if (pressed.contains(index)) pdie else Color.Black,
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 25.sp
+
+                                )
+                            } else {
+                                Text(
+                                    text = board[index].uppercase(),
+                                    color = if (pressed.contains(index)) pdie else Color.Black,
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 36.sp
+
+                                )
+                            }
+
                             //#Color(0xFF38b01e)
                         }
                     }

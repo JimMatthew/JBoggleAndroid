@@ -8,11 +8,12 @@ class WordScoreHandler (
     var updateStatus: (String) -> Unit,
     var updateScore: (Int) -> Unit,
     var updateNumWordsFound: (Int) -> Unit,
-    var updateWordsFound: (String) -> Unit
+    var updateWordsFound: (String) -> Unit,
+    var allWordsOnBoard: (List<String>) -> Unit
 ){
     private val wordSet: HashSet<String> = HashSet()
     private val userWordSet: MutableSet<String>
-    var wordsOnBoard: List<String> = ArrayList()
+    private var wordsOnBoard: List<String> = ArrayList()
         private set
     private val tsolver: BoggleTrieSolver
     private var score = 0
@@ -46,7 +47,10 @@ class WordScoreHandler (
 
     fun setBoardLayout(board: Array<String>) {
         wordsOnBoard = tsolver.solve(board)
+        allWordsOnBoard(wordsOnBoard)
     }
+
+
 
     private fun testIfWordExists(word: String): Boolean {
         return wordSet.contains(word.lowercase(Locale.getDefault()))
