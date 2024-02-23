@@ -25,7 +25,7 @@ class BoggleBoard
     private var highScoreHandler: BoggleWordHandler = BoggleWordHandler()
     private var SIZE = 4
     private var time = 0
-    private var playTime = 100
+    private var playTime = 15
     private var timer: Timer? = null
     private var isGameOver = true
     private var isRandom = true

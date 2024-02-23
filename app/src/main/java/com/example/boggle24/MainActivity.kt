@@ -1,39 +1,32 @@
 package com.example.boggle24
 
-import android.annotation.SuppressLint
+import android.content.Context
 import android.content.res.Configuration
-import android.os.Build
 import android.os.Bundle
+import android.os.StrictMode
+import android.os.StrictMode.ThreadPolicy
+import android.provider.Settings
 import android.view.WindowInsets
 import android.view.WindowInsetsController
-import android.view.WindowManager
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.view.WindowCompat
 import bogglegame.BoggleBoard
 import bogglegame.BoggleStats
 import bogglegame.FileHelper
 import com.example.boggle24.ui.theme.Boggle24Theme
-import com.example.boggle24.ui.theme.Header
-import androidx.activity.compose.setContent
-import androidx.compose.material3.Text
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
-import androidx.compose.ui.graphics.Color
-import androidx.core.view.WindowCompat
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+
 
 class MainActivity : ComponentActivity() {
 
@@ -43,10 +36,12 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
+        val policy = ThreadPolicy.Builder().permitAll().build()
+        StrictMode.setThreadPolicy(policy)
         val boggleStats = fileHelper.readStatFromFile("bog.dat")
         super.onCreate(savedInstanceState)
 
-        val states = StateManager(boggleStats, isRotated.value, saveStats = {saveStats(it)})
+        val states = StateManager(boggleStats, isRotated.value,saveStats = {saveStats(it)})
         setContent {
             val configuration = LocalConfiguration.current
 
@@ -59,10 +54,10 @@ class MainActivity : ComponentActivity() {
                     when (configuration.orientation) {
                         Configuration.ORIENTATION_LANDSCAPE -> {
                             isRotated.value = true
-                            states.rotate()
+                            states.rotate(true)
                         } else -> {
                             isRotated.value = false
-                            states.rotate()
+                            states.rotate(false)
                         }
                     }
                     Column {
