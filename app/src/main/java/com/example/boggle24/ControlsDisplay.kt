@@ -63,10 +63,22 @@ fun Controls(
                 modifier = Modifier.padding(15.dp)
             )
         }
-        Text(text = "Words Found: $numWords", modifier = Modifier.padding(8.dp))
-        Text(text = "Score: $score", modifier = Modifier.padding(8.dp))
-        Text(text = "Words on Board: " + wordsOnBoard.size, modifier = Modifier.padding(8.dp))
-        Row(modifier = Modifier.padding(8.dp), verticalAlignment = Alignment.CenterVertically) {
+        Text(
+            text = "Words Found: $numWords",
+            modifier = Modifier.padding(horizontal = 15.dp, vertical = 5.dp)
+        )
+        Text(
+            text = "Score: $score",
+            modifier = Modifier.padding(horizontal = 15.dp, vertical = 5.dp)
+        )
+        Text(
+            text = "Words on Board: " + wordsOnBoard.size,
+            modifier = Modifier.padding(horizontal = 15.dp, vertical = 5.dp)
+        )
+        Row(
+            modifier = Modifier.padding(horizontal = 15.dp, vertical = 5.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Toggle(
                 text = "HS Board",
                 value = isHS,

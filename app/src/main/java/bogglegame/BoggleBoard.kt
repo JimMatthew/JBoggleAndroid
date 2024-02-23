@@ -1,33 +1,32 @@
 package bogglegame
 
-import com.example.boggle24.MainActivity
-import java.util.Locale
 import java.util.Random
 import java.util.Timer
 import java.util.TimerTask
 import kotlin.math.abs
 
-
 class BoggleBoard
     (
-     private val gameOver: (Boolean) -> Unit,
-     private val wordInput: (String) -> Unit,
-     private val pressedDice: (ArrayList<Int>) -> Unit,
-     private val boardArray: (Array<String>) -> Unit,
-     private val updateStatus: (String) -> Unit,
-     private val isHighScoreMode: (Boolean) -> Unit,
-     private val updateTime: (String) -> Unit) {
-    var currentWord = ""
-    val die = arrayOf(
+    private val gameOver: (Boolean) -> Unit,
+    private val wordInput: (String) -> Unit,
+    private val pressedDice: (ArrayList<Int>) -> Unit,
+    private val boardArray: (Array<String>) -> Unit,
+    private val updateStatus: (String) -> Unit,
+    private val isHighScoreMode: (Boolean) -> Unit,
+    private val updateTime: (String) -> Unit
+) {
+
+    private var currentWord = ""
+    private val die = arrayOf(
         "aaeegn", "elrtty", "abbjoo", "abbkoo", "ehrtvw", "cimotu", "distty", "eiosst", "achops",
         "himnqu", "eeinsu", "eeghnnw", "affkps", "hlnnrz", "deilrx", "delrvy"
     )
     var board = Array(16) { "" }
     private var highScoreHandler: BoggleWordHandler = BoggleWordHandler()
     private var SIZE = 4
-    var time = 0
+    private var time = 0
     private var playTime = 100
-    var timer: Timer? = null
+    private var timer: Timer? = null
     private var isGameOver = true
     private var isRandom = true
     private val genScore = 200
@@ -36,6 +35,7 @@ class BoggleBoard
     private val gameBoardList: MutableList<Array<String>> = ArrayList()
     private val gameBoardWordList: MutableList<List<String>> = ArrayList()
     var pressed = ArrayList<Int>()
+
     enum class InputType {
         TAP,
         DRAG

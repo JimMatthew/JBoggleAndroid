@@ -1,25 +1,15 @@
 package com.example.boggle24
 
-
-import android.content.res.Configuration
-import android.graphics.drawable.GradientDrawable.Orientation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalConfiguration
 import bogglegame.BoggleBoard
 import bogglegame.BoggleStats
-import bogglegame.BoggleWordHandler
 import bogglegame.WordScoreHandler
 import com.example.boggle24.ui.theme.Header
-import java.util.Locale
 
 class StateManager(
     stats: BoggleStats,
@@ -48,15 +38,14 @@ class StateManager(
     private var gameover = mutableStateOf(false)
     private var current = mutableStateOf(" ")
     private var stats = mutableStateOf(stats)
-    var pressed = mutableStateOf(ArrayList<Int>())
+    private var pressed = mutableStateOf(ArrayList<Int>())
     var board = mutableStateOf(boardMaker.board)
     private val numWordsFound = mutableIntStateOf(0)
     private val foundWords = mutableStateOf("")
     private var wordsOnBoard = mutableStateOf(ArrayList<String>())
-    var status = mutableStateOf("")
-    var score = mutableIntStateOf(0)
+    private var status = mutableStateOf("")
+    private var score = mutableIntStateOf(0)
     private var isHighScore = mutableStateOf(boardMaker.isHighScore())
-    var or = mutableIntStateOf(0)
 
     @Composable
     fun stateManager() {
@@ -202,7 +191,6 @@ class StateManager(
         }
         boardMaker.clearCurrentWord()
     }
-
 }
 
 

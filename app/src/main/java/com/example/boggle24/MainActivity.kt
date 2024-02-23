@@ -41,8 +41,6 @@ class MainActivity : ComponentActivity() {
     private val fileHelper = FileHelper(this)
     private val isRotated = mutableStateOf(false)
 
-
-    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
 
         val boggleStats = fileHelper.readStatFromFile("bog.dat")
@@ -52,11 +50,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             val configuration = LocalConfiguration.current
 
-            val windowSizeClass = calculateWindowSizeClass(this)
             Boggle24Theme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    //color = MaterialTheme.colorScheme.background
                     color = Color.White
                 ) {
 
@@ -79,10 +75,8 @@ class MainActivity : ComponentActivity() {
                         } else {
                             states.stateManager()
                         }
-
                     }
                 }
-
             }
             hideSystemUI()
         }
@@ -100,8 +94,6 @@ class MainActivity : ComponentActivity() {
             systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         }
     }
-
-
 }
 
 @Preview(showBackground = true)

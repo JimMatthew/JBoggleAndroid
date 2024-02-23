@@ -30,11 +30,11 @@ fun Header(
     val currentLocalConfig = LocalConfiguration.current
     val screenWidth = currentLocalConfig.screenWidthDp
     val size = screenWidth / 3
+
     Column {
         Row(
             horizontalArrangement = Arrangement.Absolute.Center,
             verticalAlignment = Alignment.CenterVertically,
-            //modifier = Modifier.fillMaxWidth(),
         ) {
             Text(
                 text = "  Time : $timeleft",
@@ -43,7 +43,7 @@ fun Header(
             )
             Button(
                 colors = ButtonDefaults.buttonColors(containerColor = coolblue),
-                modifier = Modifier.padding(1.dp).width(size.dp),
+                modifier = Modifier.padding(5.dp).width(size.dp),
                 onClick = {
                     newGame()
                 }) {

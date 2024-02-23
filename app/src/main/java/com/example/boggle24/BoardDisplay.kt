@@ -60,7 +60,6 @@ fun BoardDisplay(
             Row {
                 for (j in 0..3) {
                     val index = (i * 4) + j
-                    val c = if (pressed.contains(index)) Color.White else Color.White
                     Button(
                         onClick = {
                         },
@@ -136,8 +135,7 @@ fun BoardDisplay(
                                     text = board[index].uppercase(),
                                     color = if (pressed.contains(index)) pdie else Color.Black,
                                     fontWeight = FontWeight.Bold,
-                                    fontSize = 25.sp
-
+                                    fontSize = 36.sp
                                 )
                             } else {
                                 Text(
@@ -145,11 +143,8 @@ fun BoardDisplay(
                                     color = if (pressed.contains(index)) pdie else Color.Black,
                                     fontWeight = FontWeight.Bold,
                                     fontSize = 36.sp
-
                                 )
                             }
-
-                            //#Color(0xFF38b01e)
                         }
                     }
                 }

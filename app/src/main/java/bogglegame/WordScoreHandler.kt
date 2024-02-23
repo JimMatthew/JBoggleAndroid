@@ -14,7 +14,6 @@ class WordScoreHandler (
     private val wordSet: HashSet<String> = HashSet()
     private val userWordSet: MutableSet<String>
     private var wordsOnBoard: List<String> = ArrayList()
-        private set
     private val tsolver: BoggleTrieSolver
     private var score = 0
     init {
