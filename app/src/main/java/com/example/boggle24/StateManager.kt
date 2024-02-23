@@ -10,7 +10,6 @@ import bogglegame.BoggleBoard
 import bogglegame.BoggleStats
 import bogglegame.WordScoreHandler
 import com.example.boggle24.ui.theme.Header
-import com.google.firebase.firestore.FirebaseFirestore
 
 class StateManager(
     stats: BoggleStats,
@@ -130,9 +129,6 @@ class StateManager(
         }
     }
 
-
-
-
     private fun setTimeLeft(time: String) {
         timeLeft.value = time
     }
@@ -190,12 +186,12 @@ class StateManager(
     }
 
     private fun submitWord() {
+        if (current.value.length < 3) return
         if (boggleWordHandler.submit(current.value)) {
             stats.value.isWordLongestFour(current.value)
         }
         boardMaker.clearCurrentWord()
     }
-
 }
 
 
