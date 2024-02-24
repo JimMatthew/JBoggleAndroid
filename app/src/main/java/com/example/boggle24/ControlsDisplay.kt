@@ -10,6 +10,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -58,14 +59,26 @@ fun Controls(
             Text(
                 text = status,
                 fontWeight = FontWeight.Bold,
-                fontSize = 23.sp,
-                modifier = Modifier.padding(20.dp)
+                fontSize = 20.sp,
+                modifier = Modifier.padding(15.dp)
             )
         }
-        Text(text = "Words Found: $numWords", modifier = Modifier.padding(8.dp))
-        Text(text = "Score: $score", modifier = Modifier.padding(8.dp))
-        Text(text = "Words on Board: " + wordsOnBoard.size, modifier = Modifier.padding(8.dp))
-        Row(modifier = Modifier.padding(5.dp)) {
+        Text(
+            text = "Words Found: $numWords",
+            modifier = Modifier.padding(horizontal = 15.dp, vertical = 5.dp)
+        )
+        Text(
+            text = "Score: $score",
+            modifier = Modifier.padding(horizontal = 15.dp, vertical = 5.dp)
+        )
+        Text(
+            text = "Words on Board: " + wordsOnBoard.size,
+            modifier = Modifier.padding(horizontal = 15.dp, vertical = 5.dp)
+        )
+        Row(
+            modifier = Modifier.padding(horizontal = 15.dp, vertical = 5.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Toggle(
                 text = "HS Board",
                 value = isHS,

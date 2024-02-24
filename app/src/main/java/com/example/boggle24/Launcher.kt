@@ -30,7 +30,8 @@ import com.example.boggle24.ui.theme.coolblue
 @Composable
 fun Launcher(
     startGame: () -> Unit,
-    stats: BoggleStats
+    stats: BoggleStats,
+    isRotated: Boolean
 ) {
     val showSettings by remember { mutableStateOf(false) }
     var showStats by remember { mutableStateOf(false) }
@@ -43,13 +44,23 @@ fun Launcher(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center
     ) {
-        Text(
-            fontFamily = FontFamily.Monospace,
-            text = "JBoggle",
-            fontWeight = FontWeight.Bold,
-            fontSize = 35.sp,
-            modifier = Modifier.padding(20.dp, 150.dp)
-        )
+        if (isRotated){
+            Text(
+                fontFamily = FontFamily.Monospace,
+                text = "JBoggle",
+                fontWeight = FontWeight.Bold,
+                fontSize = 25.sp,
+                modifier = Modifier.padding(20.dp, 15.dp)
+            )
+        } else {
+            Text(
+                fontFamily = FontFamily.Monospace,
+                text = "JBoggle",
+                fontWeight = FontWeight.Bold,
+                fontSize = 35.sp,
+                modifier = Modifier.padding(20.dp, 150.dp)
+            )
+        }
     }
 
     Column(
@@ -76,11 +87,7 @@ fun Launcher(
                 Text("Statistics")
             }
         }
-        Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
-            if (showSettings) {
-                SettingsDisplay(::setTime)
-            }
-        }
+
         Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
             if (showStats) {
                 StatCard(

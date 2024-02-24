@@ -32,6 +32,7 @@ fun GameOverDisplay(
     longestWord: String,
     totalGames: Int,
     foundWords: String,
+    isRotated: Boolean,
     wordsOnBoard: List<String?>
 ) {
     var showStats by remember { mutableStateOf(false) }

@@ -60,15 +60,13 @@ public class BoggleStats implements Serializable {
 		total4GamesPlayed++;
 	}
 
-	public void add5GamePlayed() {
-		total5GamesPlayed++;
-	}
 
 	public void add4Score(int score) {
 		total4Score = total4Score + score;
 		if (score > high4Score) {
 			high4Score = score;
 		}
+		total4GamesPlayed++;
 	}
 
 	public void add5Score(int score) {
